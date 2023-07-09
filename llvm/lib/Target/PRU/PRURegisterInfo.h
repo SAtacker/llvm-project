@@ -12,7 +12,7 @@ namespace llvm {
 class PRUSubtarget;
 
 struct PRURegisterInfo : public PRUGenRegisterInfo {
-  const TOYRISCVSubtarget &Subtarget;
+  const PRUSubtarget &Subtarget;
   PRURegisterInfo(PRUSubtarget const &ST)
 
   MCPhysReg const *getCalleeSavedRegs(MachineFunction const *MF) const override;
