@@ -1,8 +1,6 @@
 #include "PRUTargetMachine.h"
 
-#include "LeonPasses.h"
 #include "PRU.h"
-#include "PRUMachineFunctionInfo.h"
 #include "PRUTargetObjectFile.h"
 #include "PRUISelDagToDag.h"
 #include "llvm/CodeGen/Passes.h"
@@ -20,13 +18,12 @@ extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializePRUTarget() {
 // Register the target.
 RegisterTargetMachine<PRUTargetMachine> X(getThePRUTarget());
 
-static StringRef computeDataLayout(const Triple &TT, StringRef CPU,
-                                   const TargetOptions &Options) {
+static std::string computeDataLayout(const Triple &T){
                                   return "e-m:e-p:32:8-i8:8-i16:16:8-i32:32:8-i64:64:8-f32:8-f64:8-n8";
                                    }
 
 static Reloc::Model getEffectiveRelocModel(bool JIT,
-                                           Optional<Reloc::Model> RM) {
+                                           std::optional<Reloc::Model> RM) {
   if (!RM.hasValue() || JIT) {
     return Reloc::Static;
   }
@@ -49,7 +46,7 @@ PRUTargetMachine::PRUTargetMachine(const Target &T, const Triple &TT,
 
 PRUSubtarget const *
 PRUTargetMachine::getSubtargetImpl(Function const &F) const {
-  return &DefaultSubtarget;
+  return &Subtarget;
 }
 
 TargetPassConfig *PRUTargetMachine::createPassConfig(PassManagerBase &PM) {

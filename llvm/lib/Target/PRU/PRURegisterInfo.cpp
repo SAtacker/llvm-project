@@ -11,10 +11,10 @@
 #define GET_REGINFO_TARGET_DESC
 #include "PRUGenRegisterInfo.inc"
 
-using namespace llvm;
+namespace llvm {
 
-PRURegisterInfo::PRURegisterInfo((PRUSubtarget const &ST)
-    : PRUGenRegisterInfo(0), Subtarget(ST) {})
+PRURegisterInfo::PRURegisterInfo()
+    : PRUGenRegisterInfo(0) {}
 
 MCPhysReg const *
 PRURegisterInfo::getCalleeSavedRegs(MachineFunction const *MF) const {
@@ -28,7 +28,7 @@ PRURegisterInfo::getCallPreservedMask(MachineFunction const &MF,
   return CSR_LP32_RegMask;
 }
 
-void PRURegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
+bool PRURegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
                                                int SPAdj, unsigned FIOperandNum,
                                                RegScavenger *RS) const {
   // TODO
@@ -38,4 +38,6 @@ Register
 PRURegisterInfo::getFrameRegister(MachineFunction const &MF) const {
   // TODO
   
+}
+
 }

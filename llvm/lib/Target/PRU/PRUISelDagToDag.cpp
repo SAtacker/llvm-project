@@ -1,4 +1,4 @@
-#include "PRUISelDagToDag.h"
+#include "PRUTargetMachine.h"
 #include "llvm/CodeGen/MachineRegisterInfo.h"
 #include "llvm/CodeGen/SelectionDAGISel.h"
 #include "llvm/IR/Intrinsics.h"
@@ -8,19 +8,25 @@
 
 using namespace llvm;
 
-PRUDAGToDAGISel::PRUDAGToDAGISel(PRUTargetMachine &TM,
-                                           CodeGenOpt::Level OL)
-    : SelectionDAGISel(TM, OL), Subtarget(nullptr) {}
+#define PASS_NAME "PRU DAG->DAG Instruction Selection"
 
-StringRef PRUDAGToDAGISel::getPassName() const {
-  return "PRU DAG->DAG Pattern Instruction Selection";
+namespace {
+class PRUDAGToDAGISel : public SelectionDAGISel {
+public:
+  static char ID;
+
+ PRUDAGToDAGISel() = delete;
+ explicit PRUDAGToDAGISel(PRUTargetMachine &tm) : SelectionDAGISel(ID, tm) {}
+
+ #include "PRUGenDAGISel.inc"
+
+ void Select(SDNode *N) override;
+
+ const PRUSubtarget *Subtarget;
+
+  };
 }
 
 void PRUDAGToDAGISel::Select(SDNode *N) {
-  if (N->isMachineOpcode()) {
-    N->setNodeId(-1);
-    return;
-  }
-
   SelectCode(N);
 }

@@ -1,4 +1,4 @@
-#include "MCTargetDesc/PRUCodeEmitter.h"
+#include "MCTargetDesc/PRUMCCodeEmitter.h"
 
 #define DEBUG_TYPE "PRU-code-emitter"
 

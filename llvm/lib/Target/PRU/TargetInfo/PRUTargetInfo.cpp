@@ -2,12 +2,13 @@
 #include "llvm/IR/Module.h"
 #include "llvm/MC/TargetRegistry.h"
 
-using namespace llvm;
-
-Target &llvm::getThePRUTarget() {
+namespace llvm {
+Target &getThePRUTarget() {
   static Target ThePRUTarget;
   return ThePRUTarget;
 }
+}
 extern "C" void LLVMInitializePRUTargetInfo() {
-  RegisterTarget<Triple::PRU, true> X(
-      getThePRU32Target(), "PRU", "PRU (32-bit)", "PRU");
+  llvm::RegisterTarget<llvm::Triple::pru> X(
+      llvm::getThePRUTarget(), "pru", "PRU (32-bit)", "PRU");
+}

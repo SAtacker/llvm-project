@@ -1,4 +1,4 @@
-#if !defined PRUREGISTERINFO_H_INCLUDED
+#ifndef PRUREGISTERINFO_H_INCLUDED
 #define PRUREGISTERINFO_H_INCLUDED
 
 #include "PRU.h"
@@ -9,16 +9,13 @@
 
 namespace llvm {
 
-class PRUSubtarget;
-
-struct PRURegisterInfo : public PRUGenRegisterInfo {
-  const PRUSubtarget &Subtarget;
-  PRURegisterInfo(PRUSubtarget const &ST)
+class PRURegisterInfo : public PRUGenRegisterInfo {
+  PRURegisterInfo();
 
   MCPhysReg const *getCalleeSavedRegs(MachineFunction const *MF) const override;
   uint32_t const *getCallPreservedMask(MachineFunction const &MF,
                                        CallingConv::ID) const override;
-  void eliminateFrameIndex(MachineBasicBlock::iterator II, int SPAdj,
+  bool eliminateFrameIndex(MachineBasicBlock::iterator II, int SPAdj,
                            unsigned FIOperandNum,
                            RegScavenger *RS = nullptr) const override;
   Register getFrameRegister(MachineFunction const &MF) const override;

@@ -4,8 +4,16 @@
 #include "llvm/MC/MCTargetOptions.h"
 #include "llvm/Support/DataTypes.h"
 
+#include <memory>
+
 namespace llvm {
 
+class MCCodeEmitter;
+class MCInstrInfo;
+class MCContext;
+
+MCCodeEmitter *createPRUMCCodeEmitter(const MCInstrInfo &MCII,
+                                        MCContext &Ctx);
 class Target;
 
 Target &getThePRUTarget();
@@ -19,6 +27,6 @@ Target &getThePRUTarget();
 #include "PRUGenInstrInfo.inc"
 
 #define GET_SUBTARGETINFO_ENUM
-#include "PRUGenSubtargetInfo.inc"
+
 
 #endif

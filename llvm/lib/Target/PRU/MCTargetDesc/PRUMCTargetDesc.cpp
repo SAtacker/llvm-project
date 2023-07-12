@@ -1,5 +1,6 @@
 #include "PRUMCTargetDesc.h"
-#include "MCTargetDesc/PRUCodeEmitter.h"
+#include "PRUMCAsmInfo.h"
+#include "MCTargetDesc/PRUMCCodeEmitter.h"
 #include "MCTargetDesc/PRUInstPrinter.h"
 #include "MCTargetDesc/PRUMCAsmInfo.h"
 #include "MCTargetDesc/PRUTargetStreamer.h"
@@ -20,24 +21,11 @@
 #include "PRUGenInstrInfo.inc"
 
 #define GET_SUBTARGETINFO_MC_DESC
-#include "PRUGenSubtargetInfo.inc"
 
 #define GET_REGINFO_MC_DESC
 #include "PRUGenRegisterInfo.inc"
 
 using namespace llvm;
-
-static MCAsmInfo *createPRUMCAsmInfo(MCRegisterInfo const &MRI,
-                                          Triple const &TT,
-                                          MCTargetOptions const &Options) {
-  MCAsmInfo *MAI = new PRUMCAsmInfo(TT);
-
-  MCRegister SP = MRI.getDwarfRegNum(PRU::SP, true);
-  MCCFIInstruction Inst = MCCFIInstruction::cfiDefCfa(nullptr, SP, 0);
-  MAI->addInitialFrameState(Inst);
-
-  return MAI;
-}
 
 static MCInstrInfo *createPRUMCInstrInfo() {
   MCInstrInfo *I = new MCInstrInfo();
@@ -49,17 +37,14 @@ static MCInstrInfo *createPRUMCInstrInfo() {
 static MCRegisterInfo *createPRUMCRegisterInfo(Triple const &TT) {
   MCRegisterInfo *X = new MCRegisterInfo();
   // This function is generated in PRUGenRegisterInfo.inc
-  InitPRUMCRegisterInfo(X, PRU::RA);
+  InitPRUMCRegisterInfo(X, 0);
   return X;
 }
 
 static MCSubtargetInfo *
 createPRUMCSubtargetInfo(Triple const &TT, StringRef CPU, StringRef FS) {
-  if (CPU.empty()) {
-    CPU = "pru";
-  }
   // This function is generated in PRUGenSubtargetInfo.inc
-  return createPRUMCSubtargetInfoImpl(TT, CPU, CPU, FS);
+  return createPRUMCSubtargetInfo(TT, CPU, FS);
 }
 
 static MCInstrAnalysis *createPRUMCInstrAnalysis(const MCInstrInfo *Info) {
@@ -80,14 +65,8 @@ createPRUAsmTargetStreamer(MCStreamer &S, formatted_raw_ostream &OS,
   return new PRUTargetAsmStreamer(S, OS);
 }
 
-static MCCodeEmitter *createPRUMCCodeEmitter(MCInstrInfo const &MCII,
-                                                  MCRegisterInfo const &MRI,
-                                                  MCContext &Ctx) {
-  return new PRUMCCodeEmitter(MCII, Ctx, true);
-}
-
 static void initializeTarget(Target &T) {
-  TargetRegistry::RegisterMCAsmInfo(T, createPRUMCAsmInfo);
+  RegisterMCAsmInfo<PRUMCAsmInfo> X(T);
   TargetRegistry::RegisterMCInstrInfo(T, createPRUMCInstrInfo);
   TargetRegistry::RegisterMCRegInfo(T, createPRUMCRegisterInfo);
   TargetRegistry::RegisterMCSubtargetInfo(T, createPRUMCSubtargetInfo);

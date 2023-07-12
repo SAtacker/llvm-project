@@ -1,5 +1,4 @@
 #include "PRUTargetObjectFile.h"
-#include "MCTargetDesc/SparcMCExpr.h"
 #include "llvm/BinaryFormat/Dwarf.h"
 #include "llvm/CodeGen/MachineModuleInfoImpls.h"
 #include "llvm/CodeGen/TargetLowering.h"

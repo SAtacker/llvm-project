@@ -1,12 +1,11 @@
-#include "PRUAsmPrinter.h"
 #include "PRU.h"
-#include "PRUSubtarget.h"
+#include "PRUInstrInfo.h"
 #include "PRUTargetMachine.h"
 #include "llvm/MC/MCStreamer.h"
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Target/TargetMachine.h"
 
-#define DEBUG_TYPE "pru-asm-printer"
+#define DEBUG_TYPE_A "pru-asm-printer"
 
 namespace llvm {
 

@@ -1,11 +1,10 @@
-#include "llvm/ADT/Triple.h"
 #include "PRUMCAsmInfo.h"
+#include "llvm/ADT/Triple.h"
 
 using namespace llvm;
 
-void PRUMCAsmInfo::anchor() {}
-
-PRUMCAsmInfo::PRUMCAsmInfo(Triple const &T) {
+namespace llvm {
+PRUMCAsmInfo::PRUMCAsmInfo(const Triple &T, const MCTargetOptions &Options) {
   AlignmentIsInBytes = true;
   Data16bitsDirective = "\t.word\t";
   PrivateGlobalPrefix = "$";
@@ -13,4 +12,5 @@ PRUMCAsmInfo::PRUMCAsmInfo(Triple const &T) {
   CommentString = "#";
   SupportsDebugInformation = true;
   DwarfRegNumForCFI = true;
+}
 } // end of namespace llvm

@@ -1,4 +1,4 @@
-#ifndefined MCTARGETDESC_PRUINSTPRINTER_H_INCLUDED
+#ifndef MCTARGETDESC_PRUINSTPRINTER_H_INCLUDED
 #define MCTARGETDESC_PRUINSTPRINTER_H_INCLUDED
 
 #include "llvm/MC/MCInstPrinter.h"
@@ -14,7 +14,7 @@ public:
 
   void printInst(MCInst const *MI, uint64_t Address, StringRef Annot,
                  MCSubtargetInfo const &STI, raw_ostream &O) override;
-  void printRegName(raw_ostream &OS, unsigned RegNo) const override;
+  void printRegName(raw_ostream &OS, MCRegister Reg) const;
   void printOperand(MCInst const *MI, unsigned OpNo, raw_ostream &O);
   void printOperand(MCInst const *MI, uint64_t _Address, unsigned OpNum,
                     raw_ostream &O);
@@ -22,7 +22,7 @@ public:
   // These member functions are generated in PRUGenAsmWriter.inc
   std::pair<char const *, uint64_t> getMnemonic(MCInst const *MI) override;
   void printInstruction(MCInst const *MI, uint64_t Address, raw_ostream &OS);
-  static char const *getRegisterName(unsigned RegNo);
+  static char const *getRegisterName(MCRegister Reg);
   bool printAliasInstr(MCInst const *MI, uint64_t Address, raw_ostream &OS);
 };
 

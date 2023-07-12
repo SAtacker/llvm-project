@@ -3,7 +3,6 @@ set(LLVM_TARGET_DEFINITIONS PRU.td)
 
 tablegen(LLVM PRUGenRegisterInfo.inc -gen-register-info)
 tablegen(LLVM PRUGenInstrInfo.inc -gen-instr-info)
-tablegen(LLVM PRUGenSubtargetInfo.inc -gen-subtarget)
 tablegen(LLVM PRUGenMCPseudoLowering.inc -gen-pseudo-lowering)
 tablegen(LLVM PRUGenDAGISel.inc -gen-dag-isel)
 tablegen(LLVM PRUGenCallingConv.inc -gen-callingconv)

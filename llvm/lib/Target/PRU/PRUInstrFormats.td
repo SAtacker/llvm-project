@@ -19,11 +19,12 @@ class InstPRU<dag outs, dag ins, string asmstr, list<dag> pattern>
 
   let DecoderNamespace = "PRU";
   field bits<32> SoftFail = 0;
+
   }
 
 // PRU Pseudo Instructions Format
-// Pseudo instructions are not real PRU instructions.
-class PRUPseudoInst<dag outs, dag ins, string asmstr, list<dag> pattern>
+
+class Pseudo<dag outs, dag ins, string asmstr, list<dag> pattern>
     : InstPRU<outs, ins, asmstr, pattern> {
   let isPseudo = 1;
   let isCodeGenOnly = 1;

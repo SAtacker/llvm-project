@@ -1,7 +1,6 @@
-#if !defined PRUISELLOWERING_H_INCLUDED
+#ifndef PRUISELLOWERING_H_INCLUDED
 #define PRUISELLOWERING_H_INCLUDED
 
-#include "MCTargetDesc/PRUABIInfo.h"
 #include "PRU.h"
 #include "llvm/CodeGen/SelectionDAG.h"
 #include "llvm/CodeGen/TargetLowering.h"

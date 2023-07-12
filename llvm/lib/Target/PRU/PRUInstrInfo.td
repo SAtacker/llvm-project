@@ -43,6 +43,11 @@ def i32imm_255 : ImmLeaf<i32, [{return (uint32_t) Imm <= 255;}]>;
 def i16imm_65535 : ImmLeaf<i16, [{return (uint16_t) Imm <= 65535;}]>;
 def i32imm_65535 : ImmLeaf<i32, [{return (uint32_t) Imm <= 65535;}]>;
 
+let Defs = [r2], Uses = [r2], hasSideEffects = 1 in {
+  def ADJCALLSTACKDOWN : Pseudo<(outs), (ins i16imm: $amt, i16imm: $amt2), "#ADJCALLSTACKDOWN", [(callseq_start i16imm: $amt, i16imm: $amt2)]>;
+  def ADJCALLSTACKUP   : Pseudo<(outs), (ins i32imm: $amt, i32imm: $amt2), "#ADJCALLSTACKDOWN", [(callseq_end timm: $amt,   timm: $amt2)]>;
+}
+
 //===----------------------------------------------------------------------===//
 // PRU Operand Definitions
 //===----------------------------------------------------------------------===//
@@ -68,25 +73,25 @@ def regaddr : Operand<iPTR>, ComplexPattern<iPTR, 2, "SelectAddressReg"> {
 // Instructions specific format
 
 // Arithmetic and logical instructions with 3 register operands
-class ArithLogicR<bits<8> opcode, string opstr, SDNode opNode, bit isComm = 0>
-  : ALU_Inst_RR<opcode, (outs reg32:$ri), (ins reg32:$rj, reg32:$rk),
+multiclass ArithLogicRI<bits<8> opcode, string opstr, SDNode opNode>
+{
+  
+  def RR: ALU_Inst_RR<opcode, (outs reg32:$ri), (ins reg32:$rj, reg32:$rk),
        !strconcat(opstr, "\t$ri, $rj, $rk"),
-       [(set reg32:$ri, (opNode reg32:$rj, reg32:$rk))]> {
-  let isCommutable = isComm;
-  let isReMaterializable = 1;
-}
+       [(set reg32:$ri, (opNode reg32:$rj, reg32:$rk))]>;
+
 
 // Arithmetic and logical instructions with 2 register operands
-class ArithLogicI<bits<8> opcode, string  opstr, SDNode opNode>
-  : ALU_Inst_RI<opcode, (outs reg32:$ri), (ins reg32:$rj, i16imm_255:$const),
+
+ def RI : ALU_Inst_RI<opcode, (outs reg32:$ri), (ins reg32:$rj, i16imm_255:$const),
        !strconcat(opstr, "\t$ri, $rj, $const"),
-       [(set reg32:$ri, (opNode reg32:$rj, i16imm_255:$const))]> {
-  let isReMaterializable = 1;
+       [(set reg32:$ri, (opNode reg32:$rj, i16imm_255:$const))]>;
 }
 
 //Load and store
-class LDI<bits<8> opcode, string opstr, SDNode opNode, Operand od>
-  : LS_Inst<opcode, (outs reg32:$ri), (ins od:$addr),
+multiclass LDI<bits<8> opcode, string opstr, SDNode opNode, Operand od>{
+  def LD : LS_Inst<opcode, (outs reg32:$ri), (ins od:$addr),
          !strconcat(opstr, "\t$ri, $addr"),
-       [(set reg32:$ri, (opNode addr:$addr))]> {
+       [(set reg32:$ri, (opNode addr:$addr))]>;
 }
+

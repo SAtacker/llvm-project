@@ -3,14 +3,12 @@
 #include "PRUISelLowering.h"
 #include "PRURegisterInfo.h"
 #include "PRUTargetMachine.h"
+#include "MCTargetDesc/PRUMCTargetDesc.h"
 
 #define GET_SUBTARGETINFO_TARGET_DESC
 #define GET_SUBTARGETINFO_CTOR
-#include "PRUGenSubtargetInfo.inc"
 
 #define DEBUG_TYPE "pru-subtarget"
-
-void PRUSubtarget::anchor() {}
 
 namespace llvm {
 
@@ -30,4 +28,4 @@ PRUSubtarget::initializeSubtargetDependencies(StringRef CPU, StringRef FS,
   return *this;
 }
 
-} // end of namespace llvm
+}

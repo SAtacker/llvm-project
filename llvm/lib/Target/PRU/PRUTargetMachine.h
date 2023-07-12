@@ -3,14 +3,11 @@
 #ifndef LLVM_PRU_TARGET_MACHINE_H
 #define LLVM_PRU_TARGET_MACHINE_H
 
-#include "llvm/IR/DataLayout.h"
 #include "llvm/Target/TargetMachine.h"
 
 #include "PRUInstrInfo.h"
 #include "PRUSubtarget.h"
-#include "PRUFrameLowering.h"
-#include "PRUSelectionDAGInfo.h"
-#include "PRUISelLowering.h"
+
 
 #include <optional>
 
@@ -18,6 +15,9 @@ namespace llvm {
 
 /// A generic PRU implementation.
 class PRUTargetMachine : public LLVMTargetMachine {
+  std::unique_ptr<TargetLoweringObjectFile> TLOF;
+  PRUSubtarget Subtarget;
+
 public:
   PRUTargetMachine(const Target &T, const Triple &TT, StringRef CPU,
                    StringRef FS, const TargetOptions &Options,
@@ -37,10 +37,9 @@ public:
   MachineFunctionInfo *
   createMachineFunctionInfo(BumpPtrAllocator &Allocator, const Function &F,
                             const TargetSubtargetInfo *STI) const override;
-
-private:
-  std::unique_ptr<TargetLoweringObjectFile> TLOF;
-  PRUSubtarget DefaultSubtarget;
+  
 };
 
 } // end namespace llvm
+
+#endif

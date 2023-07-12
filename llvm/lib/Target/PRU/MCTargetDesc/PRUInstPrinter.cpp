@@ -12,7 +12,7 @@
 
 #include "PRUInstPrinter.h"
 
-#include "MCTargetDesc/AVRMCTargetDesc.h"
+#include "MCTargetDesc/PRUMCTargetDesc.h"
 
 #include "llvm/MC/MCExpr.h"
 #include "llvm/MC/MCInst.h"
@@ -49,8 +49,8 @@ void PRUInstPrinter::printInst(MCInst const *MI, uint64_t Address,
   printAnnotation(O, Annot);
 }
 
-void PRUInstPrinter::printRegName(raw_ostream &OS, unsigned RegNo) const {
-  OS << StringRef(getRegisterName(RegNo)).lower();
+void PRUInstPrinter::printRegName(raw_ostream &OS, MCRegister Reg) const {
+  OS << '%' << StringRef(getRegisterName(Reg)).lower();
 }
 
 void PRUInstPrinter::printOperand(MCInst const *MI, unsigned OpNo,

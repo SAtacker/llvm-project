@@ -1,19 +1,16 @@
-#ifndefined PRUFRAMELOWERING_H_INCLUDED
+#ifndef PRUFRAMELOWERING_H_INCLUDED
 #define PRUFRAMELOWERING_H_INCLUDED
 
 #include "PRU.h"
 #include "llvm/CodeGen/TargetFrameLowering.h"
+#include "llvm/Support/TypeSize.h"
 
 namespace llvm {
 
-class PRUSubtarget;
-
 class PRUFrameLowering : public TargetFrameLowering {
-protected:
-  const PRUSubtarget &STI;
 
 public:
-  explicit PRUFrameLowering(const PRUSubtarget &sti);
+  explicit PRUFrameLowering();
 
   void emitPrologue(MachineFunction &MF, MachineBasicBlock &MBB) const override;
   void emitEpilogue(MachineFunction &MF, MachineBasicBlock &MBB) const override;

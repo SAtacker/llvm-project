@@ -1,7 +1,6 @@
-#ifndefined PRUINSTRINFO_H_INCLUDED
+#ifndef PRUINSTRINFO_H_INCLUDED
 #define PRUINSTRINFO_H_INCLUDED
 
-#include "PRU.h"
 #include "PRURegisterInfo.h"
 #include "llvm/CodeGen/TargetInstrInfo.h"
 
@@ -11,12 +10,14 @@
 namespace llvm {
 
 class PRUInstrInfo : public PRUGenInstrInfo {
-  virtual void anchor();
-
+const PRURegisterInfo RI;
 public:
-  PRUInstrInfo();
+  explicit PRUInstrInfo();
 
+   const PRURegisterInfo &getRegisterInfo() const { return RI; }
   // TODO
+  
+ 
 };
 
 } // namespace llvm
