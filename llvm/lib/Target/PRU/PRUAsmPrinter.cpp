@@ -3,7 +3,7 @@
 #include "PRUTargetMachine.h"
 #include "llvm/MC/MCStreamer.h"
 #include "llvm/MC/TargetRegistry.h"
-#include "llvm/Target/TargetMachine.h"
+#include "llvm/CodeGen/AsmPrinter.h"
 
 #define DEBUG_TYPE_A "pru-asm-printer"
 

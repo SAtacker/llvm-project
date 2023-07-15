@@ -4,10 +4,14 @@
 #define LLVM_PRU_TARGET_MACHINE_H
 
 #include "llvm/Target/TargetMachine.h"
+#include "llvm/IR/DataLayout.h"
 
 #include "PRUInstrInfo.h"
 #include "PRUSubtarget.h"
+#include "PRUFrameLowering.h"
+#include "PRUISelLowering.h"
 
+#include <memory>
 
 #include <optional>
 
@@ -15,6 +19,8 @@ namespace llvm {
 
 /// A generic PRU implementation.
 class PRUTargetMachine : public LLVMTargetMachine {
+
+  private:
   std::unique_ptr<TargetLoweringObjectFile> TLOF;
   PRUSubtarget Subtarget;
 
@@ -31,6 +37,8 @@ public:
   TargetLoweringObjectFile *getObjFileLowering() const override {
     return this->TLOF.get();
   }
+
+    ~PRUTargetMachine() override;
 
   TargetPassConfig *createPassConfig(PassManagerBase &PM) override;
 

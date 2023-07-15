@@ -18,6 +18,7 @@
 #include "llvm/MC/MCInst.h"
 #include "llvm/MC/MCInstrDesc.h"
 #include "llvm/MC/MCInstrInfo.h"
+#include "llvm/MC/MCSubtargetInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/FormattedStream.h"
@@ -34,11 +35,6 @@ using namespace llvm;
 
 #define PRINT_ALIAS_INSTR
 #include "PRUGenAsmWriter.inc"
-
-PRUInstPrinter::PRUInstPrinter(MCAsmInfo const &MAI,
-                                         MCInstrInfo const &MII,
-                                         MCRegisterInfo const &MRI)
-    : MCInstPrinter(MAI, MII, MRI) {}
 
 void PRUInstPrinter::printInst(MCInst const *MI, uint64_t Address,
                                     StringRef Annot, MCSubtargetInfo const &STI,
@@ -68,9 +64,4 @@ void PRUInstPrinter::printOperand(MCInst const *MI, unsigned OpNo,
 
   assert(Op.isExpr() && "unknown operand kind in printOperand");
   Op.getExpr()->print(OS, &MAI, true);
-}
-
-void PRUInstPrinter::printOperand(MCInst const *MI, uint64_t _Address,
-                                       unsigned OpNum, raw_ostream &O) {
-  printOperand(MI, OpNum, O);
 }

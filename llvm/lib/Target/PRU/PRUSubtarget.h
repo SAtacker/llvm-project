@@ -4,7 +4,7 @@
 #include "PRUFrameLowering.h"
 #include "PRUISelLowering.h"
 #include "PRUInstrInfo.h"
-#include "PRUISelDagToDag.h"
+#include "llvm/ADT/Triple.h"
 #include "llvm/CodeGen/SelectionDAGTargetInfo.h"
 #include "llvm/CodeGen/TargetSubtargetInfo.h"
 #include "llvm/IR/DataLayout.h"
@@ -18,10 +18,12 @@
 #define DEBUG_TYPE "PRU-subtarget"
 
 namespace llvm {
-class StringRef;
 
 class PRUSubtarget : public PRUGenSubtargetInfo {
-
+  
+  virtual void anchor();
+  
+  private:
   PRUInstrInfo InstrInfo;
   PRUFrameLowering FrameLowering;
   PRUTargetLowering TLInfo;
@@ -40,9 +42,6 @@ class PRUSubtarget : public PRUGenSubtargetInfo {
   }
   const SelectionDAGTargetInfo *getSelectionDAGInfo() const override {
     return &TSInfo;
-  }
-  const PRURegisterInfo *getRegisterInfo() const override {
-    return &InstrInfo.getRegisterInfo();
   }
 
 

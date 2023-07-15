@@ -3,7 +3,6 @@
 
 #include "PRU.h"
 #include "llvm/CodeGen/TargetFrameLowering.h"
-#include "llvm/Support/TypeSize.h"
 
 namespace llvm {
 

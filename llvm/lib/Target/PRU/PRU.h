@@ -2,7 +2,6 @@
 #define PRU_H_INCLUDED
 
 #include "MCTargetDesc/PRUMCTargetDesc.h"
-#include "llvm/Support/ErrorHandling.h"
 #include "llvm/Target/TargetMachine.h"
 
 namespace llvm {

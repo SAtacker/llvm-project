@@ -1,8 +1,9 @@
 #include "PRUMCTargetDesc.h"
 #include "PRUMCAsmInfo.h"
-#include "MCTargetDesc/PRUMCCodeEmitter.h"
-#include "MCTargetDesc/PRUInstPrinter.h"
-#include "MCTargetDesc/PRUMCAsmInfo.h"
+#include "PRUInstPrinter.h"
+#include "PRUMCAsmInfo.h"
+#include "PRUTargetStreamer.h"
+#include "TargetInfo/PRUTargetInfo.h"
 #include "MCTargetDesc/PRUTargetStreamer.h"
 #include "llvm/MC/MCELFStreamer.h"
 #include "llvm/MC/MCInstPrinter.h"
@@ -21,6 +22,7 @@
 #include "PRUGenInstrInfo.inc"
 
 #define GET_SUBTARGETINFO_MC_DESC
+#include "PRUGenSubtargetInfo.inc"
 
 #define GET_REGINFO_MC_DESC
 #include "PRUGenRegisterInfo.inc"
@@ -42,19 +44,15 @@ static MCRegisterInfo *createPRUMCRegisterInfo(Triple const &TT) {
 }
 
 static MCSubtargetInfo *
-createPRUMCSubtargetInfo(Triple const &TT, StringRef CPU, StringRef FS) {
+createPRUMCSubtargetInfo(const Triple &TT, StringRef CPU, StringRef FS) {
   // This function is generated in PRUGenSubtargetInfo.inc
-  return createPRUMCSubtargetInfo(TT, CPU, FS);
-}
-
-static MCInstrAnalysis *createPRUMCInstrAnalysis(const MCInstrInfo *Info) {
-  return new MCInstrAnalysis(Info);
+  return createPRUMCSubtargetInfo(TT, CPU, /*TuneCPU*/ CPU, FS);
 }
 
 static MCInstPrinter *createPRUMCInstPrinter(Triple const &T,
                                                   unsigned SyntaxVariant,
                                                   MCAsmInfo const &MAI,
-                                                  MCInstrInfo const &MII,
+                                                  const MCInstrInfo &MII,
                                                   MCRegisterInfo const &MRI) {
   return new PRUInstPrinter(MAI, MII, MRI);
 }
@@ -70,7 +68,6 @@ static void initializeTarget(Target &T) {
   TargetRegistry::RegisterMCInstrInfo(T, createPRUMCInstrInfo);
   TargetRegistry::RegisterMCRegInfo(T, createPRUMCRegisterInfo);
   TargetRegistry::RegisterMCSubtargetInfo(T, createPRUMCSubtargetInfo);
-  TargetRegistry::RegisterMCInstrAnalysis(T, createPRUMCInstrAnalysis);
   TargetRegistry::RegisterMCInstPrinter(T, createPRUMCInstPrinter);
   TargetRegistry::RegisterAsmTargetStreamer(T, createPRUAsmTargetStreamer);
   // TODO: TargetRegistry::RegisterObjectTargetStreamer

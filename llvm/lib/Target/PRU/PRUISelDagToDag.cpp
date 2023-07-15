@@ -1,4 +1,8 @@
 #include "PRUTargetMachine.h"
+#include "PRU.h"
+#include "PRUTargetMachine.h"
+#include "PRUSubtarget.h"
+#include "MCTargetDesc/PRUMCTargetDesc.h"
 #include "llvm/CodeGen/MachineRegisterInfo.h"
 #include "llvm/CodeGen/SelectionDAGISel.h"
 #include "llvm/IR/Intrinsics.h"
@@ -16,7 +20,7 @@ public:
   static char ID;
 
  PRUDAGToDAGISel() = delete;
- explicit PRUDAGToDAGISel(PRUTargetMachine &tm) : SelectionDAGISel(ID, tm) {}
+ explicit PRUDAGToDAGISel(PRUTargetMachine &tm) : SelectionDAGISel(ID, tm), Subtarget(nullptr) {}
 
  #include "PRUGenDAGISel.inc"
 

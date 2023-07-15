@@ -14,7 +14,8 @@ class PRURegisterInfo : public PRUGenRegisterInfo {
 
   MCPhysReg const *getCalleeSavedRegs(MachineFunction const *MF) const override;
   uint32_t const *getCallPreservedMask(MachineFunction const &MF,
-                                       CallingConv::ID) const override;
+                                       CallingConv::ID CC) const override;
+  BitVector getReservedRegs(const MachineFunction &MF) const override;
   bool eliminateFrameIndex(MachineBasicBlock::iterator II, int SPAdj,
                            unsigned FIOperandNum,
                            RegScavenger *RS = nullptr) const override;

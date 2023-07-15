@@ -1,4 +1,4 @@
-#ifndefined PRUTARGETINFO_H_INCLUDED
+#ifndef PRUTARGETINFO_H_INCLUDED
 #define PRUTARGETINFO_H_INCLUDED
 
 namespace llvm {

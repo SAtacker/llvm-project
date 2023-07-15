@@ -2,6 +2,7 @@
 #include "PRU.h"
 #include "PRURegisterInfo.h"
 #include "PRUTargetMachine.h"
+#include "PRUSubtarget.h"
 #include "MCTargetDesc/PRUMCTargetDesc.h"
 
 #include "llvm/ADT/STLExtras.h"
@@ -17,6 +18,8 @@
 
 using namespace llvm;
 
+void PRUInstrInfo::anchor() {}
+
 PRUInstrInfo::PRUInstrInfo()
     : PRUGenInstrInfo(PRU::ADJCALLSTACKDOWN,
-                           PRU::ADJCALLSTACKUP), RI() {}
+                           PRU::ADJCALLSTACKUP) {}

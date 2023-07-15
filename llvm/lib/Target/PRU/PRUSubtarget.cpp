@@ -5,6 +5,9 @@
 #include "PRUTargetMachine.h"
 #include "MCTargetDesc/PRUMCTargetDesc.h"
 
+#include "llvm/BinaryFormat/ELF.h"
+#include "llvm/MC/TargetRegistry.h"
+
 #define GET_SUBTARGETINFO_TARGET_DESC
 #define GET_SUBTARGETINFO_CTOR
 
@@ -27,5 +30,5 @@ PRUSubtarget::initializeSubtargetDependencies(StringRef CPU, StringRef FS,
   ParseSubtargetFeatures(CPU, /*TuneCPU*/ CPU, FS);
   return *this;
 }
-
 }
+

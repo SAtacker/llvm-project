@@ -26,6 +26,7 @@ class InstPRU<dag outs, dag ins, string asmstr, list<dag> pattern>
 
 class Pseudo<dag outs, dag ins, string asmstr, list<dag> pattern>
     : InstPRU<outs, ins, asmstr, pattern> {
+  let Pattern = pattern;
   let isPseudo = 1;
   let isCodeGenOnly = 1;
 }

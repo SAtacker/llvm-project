@@ -8,13 +8,13 @@
 namespace llvm {
 
 class PRUSubtarget;
+class PRUTargetMachine;
 
 class PRUTargetLowering : public TargetLowering {
-  PRUSubtarget const &Subtarget;
 
 public:
-  PRUTargetLowering(PRUTargetMachine const &TM,
-                         PRUSubtarget const &STI);
+  PRUTargetLowering(const PRUTargetMachine &TM,
+                         const PRUSubtarget &STI);
   SDValue LowerFormalArguments(SDValue Chain, CallingConv::ID CallConv,
                                bool IsVarArg,
                                SmallVectorImpl<ISD::InputArg> const &Ins,
@@ -25,6 +25,10 @@ public:
                       SmallVectorImpl<ISD::OutputArg> const &Outs,
                       SmallVectorImpl<SDValue> const &OutVals, SDLoc const &dl,
                       SelectionDAG &DAG) const override;
+
+
+  protected:
+  const PRUSubtarget &Subtarget;
 };
 
 } // namespace llvm

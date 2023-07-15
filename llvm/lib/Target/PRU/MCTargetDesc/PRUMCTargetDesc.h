@@ -27,6 +27,6 @@ Target &getThePRUTarget();
 #include "PRUGenInstrInfo.inc"
 
 #define GET_SUBTARGETINFO_ENUM
-
+#include "PRUGenSubtargetInfo.inc"
 
 #endif

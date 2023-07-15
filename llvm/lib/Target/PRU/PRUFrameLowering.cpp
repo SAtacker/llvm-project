@@ -1,6 +1,7 @@
 #include "PRUFrameLowering.h"
 #include "PRUInstrInfo.h"
 #include "PRUSubtarget.h"
+#include "PRUTargetMachine.h"
 #include "PRU.h"
 #include "MCTargetDesc/PRUMCTargetDesc.h"
 #include "llvm/CodeGen/MachineFrameInfo.h"
@@ -21,6 +22,7 @@ PRUFrameLowering::PRUFrameLowering()
 
 void PRUFrameLowering::emitPrologue(MachineFunction &MF,
                                          MachineBasicBlock &MBB) const {
+   const PRUSubtarget &STI = MF.getSubtarget<PRUSubtarget>();
   // TODO
 }
 
@@ -39,5 +41,6 @@ PRUFrameLowering::eliminateCallFramePseudoInstr(
     MachineFunction &MF, MachineBasicBlock &MBB,
     MachineBasicBlock::iterator I) const {
   // TODO
+   const PRUSubtarget &STI = MF.getSubtarget<PRUSubtarget>();
   return MBB.erase(I);
 }

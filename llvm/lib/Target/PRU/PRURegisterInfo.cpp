@@ -24,20 +24,36 @@ PRURegisterInfo::getCalleeSavedRegs(MachineFunction const *MF) const {
 
 uint32_t const *
 PRURegisterInfo::getCallPreservedMask(MachineFunction const &MF,
-                                           CallingConv::ID) const {
+                                           CallingConv::ID CC) const {
   return CSR_LP32_RegMask;
+}
+
+BitVector
+PRURegisterInfo::getReservedRegs(MachineFunction const &MF) const {
+  constexpr uint16_t ReservedCPURegs[] = {PRU::r2, PRU::r4,
+                                          PRU::r14};
+  BitVector Reserved(getNumRegs());
+  for (auto const reg : ReservedCPURegs) {
+    Reserved.set(reg);
+  }
+
+  return Reserved;
 }
 
 bool PRURegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
                                                int SPAdj, unsigned FIOperandNum,
                                                RegScavenger *RS) const {
+
   // TODO
+
+  return false;
 }
 
 Register
 PRURegisterInfo::getFrameRegister(MachineFunction const &MF) const {
   // TODO
   
+return PRU::r2;
 }
 
 }

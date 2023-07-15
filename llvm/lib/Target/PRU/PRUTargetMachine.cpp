@@ -2,32 +2,33 @@
 
 #include "PRU.h"
 #include "PRUTargetObjectFile.h"
-#include "PRUISelDagToDag.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
 #include "llvm/MC/TargetRegistry.h"
+#include "TargetInfo/PRUTargetInfo.h"
+
 
 #include <optional>
 #include <string>
 
-using namespace llvm;
-
-extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializePRUTarget() {
-// Register the target.
-RegisterTargetMachine<PRUTargetMachine> X(getThePRUTarget());
-
-static std::string computeDataLayout(const Triple &T){
-                                  return "e-m:e-p:32:8-i8:8-i16:16:8-i32:32:8-i64:64:8-f32:8-f64:8-n8";
+namespace llvm {
+static StringRef computeDataLayout(const Triple &TT, StringRef CPU,
+                                   const TargetOptions &Options)
+ { return "e-m:e-p:32:8-i8:8-i16:16:8-i32:32:8-i64:64:8-f32:8-f64:8-n8";
                                    }
 
-static Reloc::Model getEffectiveRelocModel(bool JIT,
-                                           std::optional<Reloc::Model> RM) {
-  if (!RM.hasValue() || JIT) {
-    return Reloc::Static;
+static StringRef getCPU(StringRef CPU) {
+  if (CPU.empty() || CPU == "generic") {
+    return "pru";
   }
-  return *RM;
+
+  return CPU;
+}
+
+static Reloc::Model getEffectiveRelocModel(std::optional<Reloc::Model> RM) {
+  return RM.value_or(Reloc::Static);
 }
 
 PRUTargetMachine::PRUTargetMachine(const Target &T, const Triple &TT,
@@ -36,14 +37,28 @@ PRUTargetMachine::PRUTargetMachine(const Target &T, const Triple &TT,
                                    std::optional<Reloc::Model> RM,
                                    std::optional<CodeModel::Model> CM,
                                    CodeGenOpt::Level OL, bool JIT)
-    : LLVMTargetMachine(T, PRUDataLayout, TT, getCPU(CPU), FS, Options,
+    : LLVMTargetMachine(T, computeDataLayout(TT, getCPU(CPU), Options), TT, CPU, FS, Options,
                         getEffectiveRelocModel(RM),
                         getEffectiveCodeModel(CM, CodeModel::Small), OL),
-      SubTarget(TT, std::string(getCPU(CPU)), std::string(FS), *this) {
+      Subtarget(TT, std::string(getCPU(CPU)), std::string(FS), *this) {
   this->TLOF = std::make_unique<PRUTargetObjectFile>();
   initAsmInfo();
   }
 
+PRUTargetMachine::~PRUTargetMachine() {}
+
+namespace {
+/// PRU Code Generator Pass Configuration Options.
+class PRUPassConfig : public TargetPassConfig {
+public:
+  PRUPassConfig(PRUTargetMachine &TM, PassManagerBase &PM)
+      : TargetPassConfig(TM, PM) {}
+
+  PRUTargetMachine &getPRUTargetMachine() const {
+    return getTM<PRUTargetMachine>();
+  }
+};
+}
 PRUSubtarget const *
 PRUTargetMachine::getSubtargetImpl(Function const &F) const {
   return &Subtarget;
@@ -53,7 +68,8 @@ TargetPassConfig *PRUTargetMachine::createPassConfig(PassManagerBase &PM) {
   return new PRUPassConfig(*this, PM);
 }
 
-TargetLoweringObjectFile *PRUTargetMachine::getObjFileLowering() const {
-  return TLOF.get();
-}
+
+extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializePRUTarget() {
+// Register the target.
+RegisterTargetMachine<PRUTargetMachine> X(getThePRUTarget());}
 }

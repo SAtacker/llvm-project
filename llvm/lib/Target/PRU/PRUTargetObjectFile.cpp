@@ -9,6 +9,4 @@ using namespace llvm;
 void PRUTargetObjectFile::Initialize(MCContext &Ctx,
                                           TargetMachine const &TM) {
   TargetLoweringObjectFileELF::Initialize(Ctx, TM);
-  InitializeELF(TM.Options.UseInitArray);
-  this->TM = &static_cast<PRUTargetMachine const &>(TM);
 }

@@ -1,12 +1,16 @@
 #include "PRUISelLowering.h"
 #include "PRUTargetMachine.h"
+#include "PRU.h"
+#include "PRUSubtarget.h"
+#include "MCTargetDesc/PRUMCTargetDesc.h"
+
 
 #include "PRUGenCallingConv.inc"
 
 using namespace llvm;
 
-PRUTargetLowering::PRUTargetLowering(PRUTargetMachine const &TM,
-                                               PRUSubtarget const &STI)
+PRUTargetLowering::PRUTargetLowering(const PRUTargetMachine &TM,
+                                               const PRUSubtarget &STI)
     : TargetLowering(TM), Subtarget(STI) {
   // TODO
 }
@@ -27,4 +31,5 @@ PRUTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
                                     SDLoc const &dl, SelectionDAG &DAG) const {
   // TODO
   return Chain;
+
 }

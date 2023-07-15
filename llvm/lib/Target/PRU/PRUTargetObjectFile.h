@@ -6,8 +6,6 @@
 
 namespace llvm {
 
-class PRUTargetMachine;
-
 class PRUTargetObjectFile : public TargetLoweringObjectFileELF {
   PRUTargetMachine const *TM;
 
