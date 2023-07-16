@@ -7,6 +7,7 @@ tablegen(LLVM PRUGenMCPseudoLowering.inc -gen-pseudo-lowering)
 tablegen(LLVM PRUGenDAGISel.inc -gen-dag-isel)
 tablegen(LLVM PRUGenCallingConv.inc -gen-callingconv)
 tablegen(LLVM PRUGenAsmWriter.inc -gen-asm-writer)
+tablegen(LLVM PRUGenSubtargetInfo.inc -gen-subtarget)
 
 add_public_tablegen_target(PRUCommonTableGen)
 

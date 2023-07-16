@@ -1,22 +1,17 @@
 #include "PRUMCTargetDesc.h"
 #include "PRUMCAsmInfo.h"
 #include "PRUInstPrinter.h"
-#include "PRUMCAsmInfo.h"
 #include "PRUTargetStreamer.h"
 #include "TargetInfo/PRUTargetInfo.h"
-#include "MCTargetDesc/PRUTargetStreamer.h"
+
+#include "llvm/MC/MCAsmBackend.h"
+#include "llvm/MC/MCCodeEmitter.h"
 #include "llvm/MC/MCELFStreamer.h"
-#include "llvm/MC/MCInstPrinter.h"
-#include "llvm/MC/MCInstrAnalysis.h"
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MachineLocation.h"
 #include "llvm/MC/TargetRegistry.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
+
 
 #define GET_INSTRINFO_MC_DESC
 #include "PRUGenInstrInfo.inc"
@@ -46,7 +41,7 @@ static MCRegisterInfo *createPRUMCRegisterInfo(Triple const &TT) {
 static MCSubtargetInfo *
 createPRUMCSubtargetInfo(const Triple &TT, StringRef CPU, StringRef FS) {
   // This function is generated in PRUGenSubtargetInfo.inc
-  return createPRUMCSubtargetInfo(TT, CPU, /*TuneCPU*/ CPU, FS);
+  return createPRUMCSubtargetInfoImpl(TT, CPU, /*TuneCPU*/ CPU, FS);
 }
 
 static MCInstPrinter *createPRUMCInstPrinter(Triple const &T,
