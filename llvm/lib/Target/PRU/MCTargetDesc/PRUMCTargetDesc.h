@@ -1,7 +1,6 @@
 #if !defined MCTARGETDESC_MCTARGETDESC_H_INCLUDED
 #define MCTARGETDESC_MCTARGETDESC_H_INCLUDED
 
-#include "llvm/MC/MCTargetOptions.h"
 #include "llvm/Support/DataTypes.h"
 
 #include <memory>

@@ -14,7 +14,7 @@ public:
 
   void printInst(MCInst const *MI, uint64_t Address, StringRef Annot,
                  MCSubtargetInfo const &STI, raw_ostream &O) override;
-  void printRegName(raw_ostream &OS, MCRegister Reg) const;
+  void printRegName(raw_ostream &OS, MCRegister Reg) const override;
   void printOperand(MCInst const *MI, unsigned OpNo, raw_ostream &O);
 
   // These member functions are generated in PRUGenAsmWriter.inc
