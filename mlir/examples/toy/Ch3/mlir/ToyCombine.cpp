@@ -53,6 +53,46 @@ struct SimplifyRedundantTranspose : public mlir::OpRewritePattern<TransposeOp> {
   }
 };
 
+//===----------------------------------------------------------------------===//
+// SimplifyRedundantMatMul
+//===----------------------------------------------------------------------===//
+
+struct SimplifyRedundantMatMul : public OpRewritePattern<MulOp> {
+  SimplifyRedundantMatMul(mlir::MLIRContext *context)
+      : OpRewritePattern<MulOp>(context, /*benefit=*/1) {}
+
+  mlir::LogicalResult
+  matchAndRewrite(MulOp op, mlir::PatternRewriter &rewriter) const override {
+    // Look through the input of the current matmul.
+    mlir::Value matmulInput1 = op.getOperand(0);
+    mlir::Value matmulInput2 = op.getOperand(1);
+    MulOp matmulInputOp = matmulInput1.getDefiningOp<MulOp>();
+    MulOp matmulInputOp2 = matmulInput2.getDefiningOp<MulOp>();
+
+    // Input defined by another matmul? If not, no match.
+    if (!matmulInputOp)
+      return failure();
+    if (!matmulInputOp2)
+      return failure();
+
+    // Otherwise, we have a redundant matmul. Use the rewriter.
+    rewriter.replaceOpWithNewOp<MulOp>(op, op.getType(),
+                                          matmulInputOp.getOperand(0),
+                                          op.getOperand(0));
+    rewriter.replaceOpWithNewOp<MulOp>(op, op.getType(),
+                                          matmulInputOp.getOperand(1),
+                                          op.getOperand(1));
+    return success();
+  }
+};
+
+/// Register our patterns as "canonicalization" patterns on the MulOp so
+/// that they can be picked up by the Canonicalization framework.
+void MulOp::getCanonicalizationPatterns(RewritePatternSet &results,
+                                              MLIRContext *context) {
+  results.add<SimplifyRedundantMatMul>(context);
+}
+
 /// Register our patterns as "canonicalization" patterns on the TransposeOp so
 /// that they can be picked up by the Canonicalization framework.
 void TransposeOp::getCanonicalizationPatterns(RewritePatternSet &results,

@@ -315,6 +315,26 @@ mlir::LogicalResult TransposeOp::verify() {
   return mlir::success();
 }
 
+mlir::LogicalResult MulOp::verify() {
+  // Verify that the operand and result types are RankedTensorType
+  auto inputType = llvm::dyn_cast<RankedTensorType>(getOperand(0).getType());
+  auto resultType = llvm::dyn_cast<RankedTensorType>(getType());
+  if (!inputType || !resultType)
+    return mlir::success();
+
+  // Verify that the input shapes are valid for matrix multiplication
+  ArrayRef<int64_t> inputShape = inputType.getShape();
+  ArrayRef<int64_t> resultShape = resultType.getShape();
+
+  // Check if the shapes are compatible for matrix multiplication
+  if (inputShape.size() != 2 || resultShape.size() != 2 ||
+      inputShape[1] != resultShape[0]) {
+    return emitError() << "expected valid shapes for matrix multiplication";
+  }
+
+  return mlir::success();
+}
+
 //===----------------------------------------------------------------------===//
 // TableGen'd op method definitions
 //===----------------------------------------------------------------------===//
